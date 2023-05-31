@@ -1,0 +1,161 @@
+GET /books/_search
+{
+  "query": {
+    "match": {
+      "trove_id": "nla.obj-39267340"
+    }
+  }
+}
+
+
+GET /books/_search
+{
+  "_source": ["trove_id", "pages"],
+  "size": 1422,
+  "query": {
+      "bool": {
+          "must_not": {
+              "term": {
+                  "children": ""
+              }
+          }
+      }
+  },
+  "sort": [
+      {"trove_id": "asc"},
+      {"url": "desc"}
+  ]
+}
+
+
+GET /books/_search
+{
+  "size": 1422,
+  "query": {
+      "bool": {
+          "must_not": {
+              "term": {
+                  "parent": ""
+              }
+          }
+      }
+  },
+  "sort": [
+      {"trove_id": "asc"},
+      {"url": "desc"}
+  ]
+}
+GET /books/_search
+{
+  "size": 1000,
+  "query": {
+      "bool": {
+          "must_not": {
+              "term": {
+                  "parent": ""
+              }
+          }
+      }
+  },
+  "search_after": ["nla.obj-87966463", "https://trove.nla.gov.au/work/21535539"],
+  "sort": [
+      {"trove_id": "asc"},
+      {"url": "desc"}
+  ]
+}
+
+GET /books/_count
+{
+  "query": {
+    "bool": {
+      "must_not": {
+        "term": {
+          "parent": ""
+        }
+      }
+    }
+  }
+}
+POST /books/_search
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must_not": {
+        "term": {
+          "parent": ""
+        }
+      }
+    }
+  },
+  "aggs": {
+    "avg_pages": {
+      "avg": {
+        "field": "pages"
+      }
+    }
+  }
+}
+
+
+
+
+GET /books/_search
+{
+  "size": 0,
+  "aggs": {
+    "unique_formats": {
+      "terms": {
+        "field": "format"
+      }
+    }
+  }
+}
+
+
+
+
+GET /books/_search
+{
+  "query": {
+    "match": {
+      "format": "Book/Illustrated"
+    }
+  }
+}
+GET /books/_search
+{
+  "size": 0,
+  "query": {
+    "match": {
+      "format": "Book/Illustrated"
+    }
+  },
+  "aggs": {
+    "average_pages": {
+      "avg": {
+        "field": "pages"
+      }
+    }
+  }
+}
+
+
+
+
+GET /books/_search
+{
+  "size": 0,
+  "aggs": {
+    "books_by_year": {
+      "date_histogram": {
+        "field": "date",
+        "calendar_interval": "year",
+        "format": "yyyy",
+        "order": {
+          "_count": "desc"
+        }
+      }
+    }
+  }
+}
